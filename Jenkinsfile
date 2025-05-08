@@ -5,7 +5,7 @@ pipeline {
         DOCKER_CREDENTIALS_ID = 'roseaw-dockerhub'  
         DOCKER_IMAGE = 'cithit/abbottrj'                                   //<-----change this to your MiamiID!
         IMAGE_TAG = "build-${BUILD_NUMBER}"
-        GITHUB_URL = 'https://github.com/miamiohAbbottrj/225-lab4-2.git'     //<-----change this to match this new repository!
+        GITHUB_URL = 'https://github.com/miamiohAbbottrj/lab5-1.git'     //<-----change this to match this new repository!
         KUBECONFIG = credentials('abbottrj-225')                           //<-----change this to match your kubernetes credentials (MiamiID-225)! 
     }
 
@@ -15,6 +15,12 @@ pipeline {
                 cleanWs()
                 checkout([$class: 'GitSCM', branches: [[name: '*/main']],
                           userRemoteConfigs: [[url: "${GITHUB_URL}"]]])
+            }
+        }
+        stage('Lint HTML') {
+            steps {
+                sh 'npm install htmlhint --save-dev'
+                sh 'npx htmlhint *.html'
             }
         }
 
